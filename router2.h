@@ -131,6 +131,73 @@ SC_MODULE(router){
 
 	}
 
+
+	void map_rtg(){
+		rtgN.position = position;
+		rtgE.position = position;
+		rtgS.position = position;
+		rtgW.position = position;
+		rtgL.position = position;
+
+		/*if(in_port[0].caminho.front() == position){
+			in_port[0].caminho.pop();
+		}
+
+		if(in_port[1].caminho.front() == position){
+			in_port[1].caminho.pop();
+		}
+
+		if(in_port[2].caminho.front() == position){
+			in_port[2].caminho.pop();
+		}
+
+		if(in_port[3].caminho.front() == position){
+			in_port[3].caminho.pop();
+		}
+
+		if(in_port[4].caminho.front() == position){
+			in_port[4].caminho.pop();
+		}*/
+
+		
+		if(in_port[0].caminho.size() == 0){
+			portDestiny[0] = LOCAL;
+		}else{
+			rtgN.destiny = in_port[0].caminho.front();
+			portDestiny[0] = rtgN.tableAcess();
+		}
+
+		if(in_port[1].caminho.size() == 0){
+			portDestiny[1] = LOCAL;
+		}else{
+			rtgE.destiny = in_port[1].caminho.front();
+			portDestiny[1] = rtgE.tableAcess();
+		}
+
+		if(in_port[2].caminho.size() == 0){
+			portDestiny[2] = LOCAL;
+		}else{
+			rtgS.destiny = in_port[2].caminho.front();
+			portDestiny[2] = rtgS.tableAcess();
+		}
+
+		if(in_port[3].caminho.size() == 0){
+			portDestiny[3] = LOCAL;
+		}else{
+			rtgW.destiny = in_port[3].caminho.front();
+			portDestiny[3] = rtgW.tableAcess();
+		}
+
+		if(in_port[4].caminho.size() == 0){
+			portDestiny[4] = LOCAL;
+		}else{
+			rtgL.destiny = in_port[4].caminho.front();
+			portDestiny[4] = rtgL.tableAcess();
+		}	
+		
+		
+	}
+
 	void map_bf(){
 
 		bfN->din = in_port[0];
@@ -140,76 +207,6 @@ SC_MODULE(router){
 		bfL->din = in_port[4];
 
 	}
-
-
-	void map_rtg(){
-		rtgN.position = position;
-		rtgE.position = position;
-		rtgS.position = position;
-		rtgW.position = position;
-		rtgL.position = position;
-
-		cout << bfL->dout.caminho.front() << endl;
-		if(bfN->dout.caminho.front() == position){
-			bfN->dout.caminho.pop();
-		}
-
-		if(bfE->dout.caminho.front() == position){
-			bfE->dout.caminho.pop();
-		}
-
-		if(bfS->dout.caminho.front() == position){
-			bfS->dout.caminho.pop();
-		}
-
-		if(bfW->dout.caminho.front() == position){
-			bfW->dout.caminho.pop();
-		}
-
-		if(bfL->dout.caminho.front() == position){
-			bfL->dout.caminho.pop();
-		}
-
-
-		
-		if(bfN->dout.caminho.size() == 0){
-			portDestiny[0] = LOCAL;
-		}else{
-			rtgN.destiny = bfN->dout.caminho.front();
-			portDestiny[0] = rtgN.tableAcess();
-		}
-
-		if(bfE->dout.caminho.size() == 0){
-			portDestiny[1] = LOCAL;
-		}else{
-			rtgE.destiny = bfE->dout.caminho.front();
-			portDestiny[1] = rtgE.tableAcess();
-		}
-
-		if(bfS->dout.caminho.size() == 0){
-			portDestiny[2] = LOCAL;
-		}else{
-			rtgS.destiny = bfS->dout.caminho.front();
-			portDestiny[2] = rtgS.tableAcess();
-		}
-
-		if(bfW->dout.caminho.size() == 0){
-			portDestiny[3] = LOCAL;
-		}else{
-			rtgW.destiny = bfW->dout.caminho.front();
-			portDestiny[3] = rtgW.tableAcess();
-		}
-
-		if(bfL->dout.caminho.size() == 0){
-			portDestiny[4] = LOCAL;
-		}else{
-			rtgL.destiny = bfL->dout.caminho.front();
-			portDestiny[4] = rtgL.tableAcess();
-		}	
-		
-		
-	}
-
 
 	void map_arb(){
 
@@ -612,7 +609,8 @@ SC_MODULE(router){
 	}
 
 	void print(){
-
+		//cout << bfE->din.payload << endl;
+		//cout << rtgS->portDestiny << endl;
 	}
 
 	void deadline_count(){
