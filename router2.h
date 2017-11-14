@@ -139,61 +139,7 @@ SC_MODULE(router){
 		rtgW.position = position;
 		rtgL.position = position;
 
-		/*if(in_port[0].caminho.front() == position){
-			in_port[0].caminho.pop();
-		}
-
-		if(in_port[1].caminho.front() == position){
-			in_port[1].caminho.pop();
-		}
-
-		if(in_port[2].caminho.front() == position){
-			in_port[2].caminho.pop();
-		}
-
-		if(in_port[3].caminho.front() == position){
-			in_port[3].caminho.pop();
-		}
-
-		if(in_port[4].caminho.front() == position){
-			in_port[4].caminho.pop();
-		}*/
-
 		
-		if(in_port[0].caminho.size() == 0){
-			portDestiny[0] = LOCAL;
-		}else{
-			rtgN.destiny = in_port[0].caminho.front();
-			portDestiny[0] = rtgN.tableAcess();
-		}
-
-		if(in_port[1].caminho.size() == 0){
-			portDestiny[1] = LOCAL;
-		}else{
-			rtgE.destiny = in_port[1].caminho.front();
-			portDestiny[1] = rtgE.tableAcess();
-		}
-
-		if(in_port[2].caminho.size() == 0){
-			portDestiny[2] = LOCAL;
-		}else{
-			rtgS.destiny = in_port[2].caminho.front();
-			portDestiny[2] = rtgS.tableAcess();
-		}
-
-		if(in_port[3].caminho.size() == 0){
-			portDestiny[3] = LOCAL;
-		}else{
-			rtgW.destiny = in_port[3].caminho.front();
-			portDestiny[3] = rtgW.tableAcess();
-		}
-
-		if(in_port[4].caminho.size() == 0){
-			portDestiny[4] = LOCAL;
-		}else{
-			rtgL.destiny = in_port[4].caminho.front();
-			portDestiny[4] = rtgL.tableAcess();
-		}	
 		
 		
 	}

@@ -13,17 +13,17 @@ public:
 
 
 
-	int tableAcess(){
-		if((this->destiny > this->position) && (this->position == 1)){
+	int saida_routing(){
+		if((destiny > position) && (position == 1)){
 				this->portDestiny = NORTH;
-			}else if((this->destiny > this->position) && ((this->position % 2) == 1)){
+			}else if((destiny > position) && ((position % 2) == 1)){
 				this->portDestiny = NORTH;
-			}else if((this->destiny > this->position) && ((this->position % 2) == 0)){
+			}else if((destiny > position) && ((position % 2) == 0)){
 				this->portDestiny = EAST;
-			}else if((this->destiny < this->position) && ((this->position % 2) == 1)){
-				this->portDestiny = SOUTH;
-			}else if((this->destiny < this->position) && ((this->position % 2) == 0)){
+			}else if((destiny < position) && ((position % 2) == 1)){
 				this->portDestiny = WEST;
+			}else if((destiny < position) && ((position % 2) == 0)){
+				this->portDestiny = SOUTH;
 			}
 		return this->portDestiny;
 	}

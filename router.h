@@ -52,6 +52,7 @@ SC_MODULE(router){
 	sc_signal<sc_int<32> > out_ack[5];
 
 	int portDestiny[5];
+	int caminho[5];
 
 	//Sinais para verificação nos buffers
 	sc_signal<sc_int<32> > wok[5];
@@ -129,9 +130,6 @@ SC_MODULE(router){
 			fcL->out_ack.write(1);
 		}
 
-	}
-
-	void map_bf(){
 
 		bfN->din = in_port[0];
 		bfE->din = in_port[1];
@@ -139,79 +137,68 @@ SC_MODULE(router){
 		bfW->din = in_port[3];
 		bfL->din = in_port[4];
 
-	}
-
-
-	void map_rtg(){
-		rtgN.position = position;
-		rtgE.position = position;
-		rtgS.position = position;
-		rtgW.position = position;
-		rtgL.position = position;
-
-		cout << bfL->dout.caminho.front() << endl;
-		if(bfN->dout.caminho.front() == position){
+		//cout << bfL->dout.caminho.front() << endl;
+		if((bfN->dout.caminho.front() == position)){
 			bfN->dout.caminho.pop();
+			caminho[0] = bfN->dout.caminho.front();
+			if(bfN->dout.caminho.size() == 0){
+				portDestiny[0] = LOCAL;
+			}else{
+				rtgN.destiny = caminho[0];
+				rtgN.position = position;
+				portDestiny[0] = rtgN.saida_routing();
+			}
 		}
 
-		if(bfE->dout.caminho.front() == position){
+		if((bfE->dout.caminho.front() == position)){
 			bfE->dout.caminho.pop();
+			caminho[1] = bfE->dout.caminho.front();
+			if(bfE->dout.caminho.size() == 0){
+				portDestiny[1] = LOCAL;
+			}else{
+				rtgE.destiny = caminho[1];
+				rtgE.position = position;
+				portDestiny[1] = rtgE.saida_routing();
+			}
 		}
 
-		if(bfS->dout.caminho.front() == position){
+		if((bfS->dout.caminho.front() == position)){
 			bfS->dout.caminho.pop();
+			caminho[2] = bfS->dout.caminho.front();
+			if(bfS->dout.caminho.size() == 0){
+				portDestiny[2] = LOCAL;
+			}else{
+				rtgS.destiny = caminho[2];
+				rtgS.position = position;
+				portDestiny[2] = rtgS.saida_routing();
+			}
 		}
 
-		if(bfW->dout.caminho.front() == position){
+		if((bfW->dout.caminho.front() == position)){
 			bfW->dout.caminho.pop();
+			caminho[3] = bfW->dout.caminho.front();
+			if(bfW->dout.caminho.size() == 0){
+				portDestiny[3] = LOCAL;
+			}else{
+				rtgW.destiny = caminho[3];
+				rtgW.position = position;
+				portDestiny[3] = rtgW.saida_routing();
+			}
 		}
 
-		if(bfL->dout.caminho.front() == position){
+		if((bfL->dout.caminho.front() == position)){
 			bfL->dout.caminho.pop();
+			caminho[4] = bfL->dout.caminho.front();
+			if(bfL->dout.caminho.size() == 0){
+				portDestiny[4] = LOCAL;
+			}else{
+				rtgL.destiny = caminho[4];
+				rtgL.position = position;
+				portDestiny[4] = rtgL.saida_routing();
+			}
 		}
 
-
-		
-		if(bfN->dout.caminho.size() == 0){
-			portDestiny[0] = LOCAL;
-		}else{
-			rtgN.destiny = bfN->dout.caminho.front();
-			portDestiny[0] = rtgN.tableAcess();
-		}
-
-		if(bfE->dout.caminho.size() == 0){
-			portDestiny[1] = LOCAL;
-		}else{
-			rtgE.destiny = bfE->dout.caminho.front();
-			portDestiny[1] = rtgE.tableAcess();
-		}
-
-		if(bfS->dout.caminho.size() == 0){
-			portDestiny[2] = LOCAL;
-		}else{
-			rtgS.destiny = bfS->dout.caminho.front();
-			portDestiny[2] = rtgS.tableAcess();
-		}
-
-		if(bfW->dout.caminho.size() == 0){
-			portDestiny[3] = LOCAL;
-		}else{
-			rtgW.destiny = bfW->dout.caminho.front();
-			portDestiny[3] = rtgW.tableAcess();
-		}
-
-		if(bfL->dout.caminho.size() == 0){
-			portDestiny[4] = LOCAL;
-		}else{
-			rtgL.destiny = bfL->dout.caminho.front();
-			portDestiny[4] = rtgL.tableAcess();
-		}	
-		
-		
-	}
-
-
-	void map_arb(){
+		//cout << portDestiny[4] << endl;
 
 		if(arbN->rd[0].read() == 1){
 			bfN->rd.write(1);
@@ -296,9 +283,7 @@ SC_MODULE(router){
 		if(arbL->rd[4].read() == 1){
 			bfL->rd.write(1);
 		}
-	}
 
-	void request_arbiter(){
 		if(portDestiny[0] == NORTH){
 			arbN->bufferCircular[0] = 1;
 		}else if(portDestiny[0] == EAST){
@@ -363,10 +348,6 @@ SC_MODULE(router){
 			arbL->bufferCircular[4] = 1;
 		}
 
-	}
-
-
-	void chaveamento_interno(){
 		if(portDestiny[0] == NORTH){
 			out_portNN = bfN->dout;
 			out_val[0].write(1);
@@ -611,14 +592,6 @@ SC_MODULE(router){
 		
 	}
 
-	void print(){
-
-	}
-
-	void deadline_count(){
-		
-	}
-
 
 	SC_CTOR(router){
 		//Instanciando o controle de fluxo
@@ -666,23 +639,7 @@ SC_MODULE(router){
 		arbW->clk(clk);
 		arbL->clk(clk);
 
-
-		SC_METHOD(print);
-		sensitive << clk.pos();
 		SC_METHOD(map_fc);
 		sensitive << clk.pos();
-		SC_METHOD(map_bf);
-		sensitive << clk.pos();
-		SC_METHOD(map_rtg);
-		sensitive << clk.pos();
-		SC_METHOD(map_arb);
-		sensitive << clk.pos();
-		SC_METHOD(chaveamento_interno);
-		sensitive << clk.pos();
-		SC_METHOD(request_arbiter);
-		sensitive << clk.pos();
-		SC_METHOD(deadline_count);
-		sensitive << clk.pos();
-
 	}
 };
